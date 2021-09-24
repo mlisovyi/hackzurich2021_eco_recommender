@@ -1,0 +1,15 @@
+name: "zh2021"
+channels:
+  - conda-forge
+  - anaconda
+  - defaults
+dependencies:
+  - python=3.8.*
+  - pip=21.2.* # mackage manager
+  - numpy=1.21.* # arrays
+  - pandas=1.3.* # dataframes
+  - matplotlib=3.4.* # plotting
+  - jupyter=1.0.* # notebooks
+  - pyarrow=4.0.* # parquet handling
+  - black=21.* # code formatting
+  - pydantic=1.8.* # validation of the data

@@ -13,3 +13,4 @@ dependencies:
   - pyarrow=4.0.* # parquet handling
   - black=21.* # code formatting
   - pydantic=1.8.* # validation of the data
+  - tqdm=4.62.* # fancy progress-bar

@@ -70,53 +70,53 @@ if __name__ == "__main__":
     for file_name in tqdm(list(path_products.glob("*.json"))):
         with open(file_name, "r", encoding="utf-8") as f:
             jload = json.load(f)
-            product = Product(**jload)
+        product = Product(**jload)
 
-            if product.status.id != "available":
-                continue
+        if product.status.id != "available":
+            continue
 
-            record = {
-                "id": product.id,
-                "name": product.name,
-                "regulated_description": product.regulated_description,
-                "image": product.image.original,
-            }
+        record = {
+            "id": product.id,
+            "name": product.name,
+            "regulated_description": product.regulated_description,
+            "image": product.image.original,
+        }
 
-            # try to get animal welfare, if available
-            try:
-                record["animal_welfare_rating"] = product.m_check2.animal_welfare.rating
-            except AttributeError:
-                pass
+        # try to get animal welfare, if available
+        try:
+            record["animal_welfare_rating"] = product.m_check2.animal_welfare.rating
+        except AttributeError:
+            pass
 
-            # try to get carbon_footprint of ground_and_sea_cargo, if available
-            try:
-                record[
-                    "carbon_footprint_rating"
-                ] = product.m_check2.carbon_footprint.ground_and_sea_cargo.rating
-                record[
-                    "carbon_footprint_kg_co2"
-                ] = product.m_check2.carbon_footprint.ground_and_sea_cargo.kg_co2
-                record[
-                    "carbon_footprint_co2_in_car_km"
-                ] = product.m_check2.carbon_footprint.ground_and_sea_cargo.co2_in_car_km
-            except AttributeError:
-                pass
+        # try to get carbon_footprint of ground_and_sea_cargo, if available
+        try:
+            record[
+                "carbon_footprint_rating"
+            ] = product.m_check2.carbon_footprint.ground_and_sea_cargo.rating
+            record[
+                "carbon_footprint_kg_co2"
+            ] = product.m_check2.carbon_footprint.ground_and_sea_cargo.kg_co2
+            record[
+                "carbon_footprint_co2_in_car_km"
+            ] = product.m_check2.carbon_footprint.ground_and_sea_cargo.co2_in_car_km
+        except AttributeError:
+            pass
 
-            # try to get carbon_footprint of air_cargo, if available
-            try:
-                record[
-                    "carbon_footprint_rating"
-                ] = product.m_check2.carbon_footprint.air_cargo.rating
-                record[
-                    "carbon_footprint_kg_co2"
-                ] = product.m_check2.carbon_footprint.air_cargo.kg_co2
-                record[
-                    "carbon_footprint_co2_in_car_km"
-                ] = product.m_check2.carbon_footprint.air_cargo.co2_in_car_km
-            except AttributeError:
-                pass
+        # try to get carbon_footprint of air_cargo, if available
+        try:
+            record[
+                "carbon_footprint_rating"
+            ] = product.m_check2.carbon_footprint.air_cargo.rating
+            record[
+                "carbon_footprint_kg_co2"
+            ] = product.m_check2.carbon_footprint.air_cargo.kg_co2
+            record[
+                "carbon_footprint_co2_in_car_km"
+            ] = product.m_check2.carbon_footprint.air_cargo.co2_in_car_km
+        except AttributeError:
+            pass
 
-            records.append(record)
+        records.append(record)
     df = pd.DataFrame.from_records(records)
 
     fname_csv = path_products.parent / f"products_{path_products.stem}_flat.csv"

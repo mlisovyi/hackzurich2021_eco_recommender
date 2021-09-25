@@ -107,8 +107,14 @@ class TopOneSelector(BaseSelector):
             stacked_preds[col_target_reco] - stacked_preds[col_target_test]
         )
         idx_best_options = stacked_preds.groupby(self.col_product_id)[col_diff].idxmax()
-        best_options = stacked_preds.loc[idx_best_options]
+        # drop entries with missing bestalternative
+        best_options = stacked_preds.loc[idx_best_options.loc[lambda x: x.notnull()]]
+        # drop entries with the best alternative having the same metric value
+        best_options = best_options[best_options[col_diff] > 0]
 
-        best_options = best_options[[col_preds, "diff_preds"]].set_index(X.index)
+        # format the output
+        best_options = best_options[
+            [self.col_product_id, col_preds, col_diff]
+        ].reset_index(drop=True)
 
         return best_options

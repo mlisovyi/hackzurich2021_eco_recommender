@@ -25,4 +25,3 @@ if __name__ == "__main__":
     # print(best_recommendations)
 
     best_recommendations.to_csv(Path("data/recommendations.csv"), index=False)
-# %%

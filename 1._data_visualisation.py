@@ -1,5 +1,15 @@
+# %%
 import numpy as np
 import pandas as pd
 
+from utils import read_clean_product_data
+
+# %%
 if __name__ == "__main__":
-    df = pd.read_parquet("data\products\products\products_de_flat.parquet")
+    # %%
+    df = read_clean_product_data()
+
+    # %%
+    df.head()
+
+# %%

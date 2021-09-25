@@ -14,3 +14,5 @@ dependencies:
   - black=21.* # code formatting
   - pydantic=1.8.* # validation of the data
   - tqdm=4.62.* # fancy progress-bar
+  - scikit-learn=1.0
+  - nltk=3.6.* # text processing

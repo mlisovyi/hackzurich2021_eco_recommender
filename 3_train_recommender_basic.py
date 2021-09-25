@@ -4,7 +4,7 @@ import pandas as pd
 from pathlib import Path
 
 from utils import read_clean_product_data
-from r_eco_mmend import BasicBossThemaRecommender, TopOneSelector
+from r_eco_mmender import BasicBossThemaRecommender, TopOneSelector
 
 # %%
 if __name__ == "__main__":
@@ -25,4 +25,3 @@ if __name__ == "__main__":
     # print(best_recommendations)
 
     best_recommendations.to_csv(Path("data/recommendations.csv"), index=False)
-# %%

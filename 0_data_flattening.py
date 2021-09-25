@@ -10,6 +10,10 @@ from tqdm import tqdm
 import re
 
 
+class Brand(BaseModel):
+    name: str
+
+
 class Status(BaseModel):
     id: str
 
@@ -49,6 +53,7 @@ class Product(BaseModel):
     name: str
     regulated_description: Optional[str]
     boss_number: str
+    brand: Optional[Brand]
     status: Status
     image: Image
     m_check2: Optional[MCheck]
@@ -83,6 +88,11 @@ if __name__ == "__main__":
             "boss_thema_id": product.boss_number[:-2],
             "image": product.image.original,
         }
+
+        try:
+            record["brand"] = product.brand.name
+        except AttributeError:
+            pass
 
         # try to get animal welfare, if available
         try:

@@ -69,7 +69,7 @@ class BaseSelector(abc.ABC):
 
 @dataclass
 class TopOneSelector(BaseSelector):
-    col_target = "carbon_footprint_kg_co2"
+    col_target = "carbon_footprint_co2_in_car_km"
 
     def select(self, X: pd.Series, product_data: pd.DataFrame) -> pd.DataFrame:
         col_preds = "recommendation_id"
@@ -104,7 +104,7 @@ class TopOneSelector(BaseSelector):
         # choose the product that is the best
         col_diff = "diff_preds"
         stacked_preds[col_diff] = (
-            stacked_preds[col_target_reco] - stacked_preds[col_target_test]
+            stacked_preds[col_target_test] - stacked_preds[col_target_reco]
         )
         idx_best_options = stacked_preds.groupby(self.col_product_id)[col_diff].idxmax()
         # drop entries with missing bestalternative

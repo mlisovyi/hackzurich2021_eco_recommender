@@ -1,6 +1,7 @@
 # %%
 import numpy as np
 import pandas as pd
+from pathlib import Path
 
 from utils import read_clean_product_data
 from r_eco_mmend import BasicBossThemaRecommender, TopOneSelector
@@ -15,11 +16,15 @@ if __name__ == "__main__":
     mdl.fit(df)
 
     # %%
-    X_test = df  # .loc[:10, :]
+    X_test = df
     all_recommendations = mdl.predict(X_test)
 
     # %%
     selector = TopOneSelector()
     best_recommendations = selector.select(all_recommendations, df)
-    print(best_recommendations.describe())
+    # print(best_recommendations)
+
+    best_recommendations.to_csv(
+        Path("data/recommendations_boss_thema.csv"), index=False
+    )
 # %%

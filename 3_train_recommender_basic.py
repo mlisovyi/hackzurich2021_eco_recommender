@@ -24,7 +24,5 @@ if __name__ == "__main__":
     best_recommendations = selector.select(all_recommendations, df)
     # print(best_recommendations)
 
-    best_recommendations.to_csv(
-        Path("data/recommendations_boss_thema.csv"), index=False
-    )
+    best_recommendations.to_csv(Path("data/recommendations.csv"), index=False)
 # %%

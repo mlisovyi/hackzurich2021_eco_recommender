@@ -64,9 +64,19 @@ class _MyAppState extends State<MyApp> {
     return AppBar(
       title: Row(
         children: [
-          SizedBox(
-            width: 140,
-            child: Image.asset("assets/m-check-logo.png"),
+          InkWell(
+            onTap: () {
+              if (mounted) {
+                setState(() {
+                  scannedProduct = products?.values
+                      .toList()[Random().nextInt(products?.length ?? 0)];
+                });
+              }
+            },
+            child: SizedBox(
+              width: 140,
+              child: Image.asset("assets/m-check-logo.png"),
+            ),
           ),
         ],
       ),
@@ -78,22 +88,6 @@ class _MyAppState extends State<MyApp> {
               scanBarcodeNormal();
             },
           ),
-        if (kDebugMode)
-          IconButton(
-            icon: const Icon(Icons.adb),
-            onPressed: () {
-              if (mounted) {
-                setState(() {
-                  if (scannedProduct == null) {
-                    scannedProduct = products?.values
-                        .toList()[Random().nextInt(products?.length ?? 0)];
-                  } else {
-                    scannedProduct = null;
-                  }
-                });
-              }
-            },
-          )
       ],
     );
   }
@@ -224,7 +218,7 @@ class _MyAppState extends State<MyApp> {
                               //Image.asset("assets/m-check-logo.png"),
                               const SizedBox(height: 20),
                               SvgPicture.asset(
-                                "assets/klima${6 - (product.iCo2Rating ?? 5)}.svg",
+                                "assets/klima${product.iCo2Rating ?? 5}.svg",
                               ),
                               if (product == scannedProduct)
                                 const SizedBox(height: 12),

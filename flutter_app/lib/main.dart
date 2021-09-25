@@ -96,7 +96,10 @@ class _MyAppState extends State<MyApp> {
       actions: [
         if (scannedProduct != null && !showProfile)
           IconButton(
-            icon: Image.asset("assets/barcode_scan.png"),
+            icon: SvgPicture.asset(
+              "assets/barcode-scan.svg",
+              color: Colors.black,
+            ),
             onPressed: () {
               scanBarcodeNormal();
             },
@@ -149,8 +152,10 @@ class _MyAppState extends State<MyApp> {
                 height: 300,
                 child: FittedBox(
                   child: IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: const Icon(Icons.qr_code), //
+                    icon: SvgPicture.asset(
+                      "assets/barcode-scan.svg",
+                      color: Colors.black,
+                    ), //
                     onPressed: () => scanBarcodeNormal(),
                   ),
                 ),

@@ -48,6 +48,7 @@ class Product(BaseModel):
     id: str
     name: str
     regulated_description: Optional[str]
+    boss_number: str
     status: Status
     image: Image
     m_check2: Optional[MCheck]
@@ -79,6 +80,7 @@ if __name__ == "__main__":
             "id": product.id,
             "name": product.name,
             "regulated_description": product.regulated_description,
+            "boss_thema_id": product.boss_number[:-2],
             "image": product.image.original,
         }
 

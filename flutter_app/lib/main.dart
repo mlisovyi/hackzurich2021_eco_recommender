@@ -25,14 +25,13 @@ class _MyAppState extends State<MyApp> {
   Map<int, Product>? products;
   Product? scannedProduct;
   bool productNotFound = false;
+  bool showProfile = false;
 
   @override
   void initState() {
     super.initState();
     readProducts().then(
-      (value) {
-        products = value;
-      },
+      (value) => products = value,
     );
   }
 
@@ -51,11 +50,27 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget buildHome(BuildContext context) {
-    return ScaffoldMessenger(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: buildAppBar(context),
-        body: buildBody(context),
+    return WillPopScope(
+      onWillPop: () async {
+        try {
+          if (showProfile) {
+            showProfile = false;
+          } else if (scannedProduct != null) {
+            scannedProduct = null;
+          } else {
+            return true;
+          }
+          return false;
+        } finally {
+          setState(() {});
+        }
+      },
+      child: ScaffoldMessenger(
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: buildAppBar(context),
+          body: buildBody(context),
+        ),
       ),
     );
   }
@@ -66,7 +81,7 @@ class _MyAppState extends State<MyApp> {
         children: [
           InkWell(
             onTap: () {
-              if (mounted) {
+              if (mounted && !showProfile) {
                 setState(() {
                   scannedProduct = products?.values
                       .toList()[Random().nextInt(products?.length ?? 0)];
@@ -81,18 +96,39 @@ class _MyAppState extends State<MyApp> {
         ],
       ),
       actions: [
-        if (scannedProduct != null)
+        if (scannedProduct != null && !showProfile)
           IconButton(
             icon: Image.asset("assets/barcode_scan.png"),
             onPressed: () {
               scanBarcodeNormal();
             },
           ),
+        if (!showProfile)
+          IconButton(
+            color: const Color(0xFF222222),
+            icon: const Icon(Icons.account_circle),
+            onPressed: () {
+              if (mounted) {
+                setState(() {
+                  showProfile = true;
+                });
+              }
+            },
+          ),
+        const SizedBox(width: 5),
       ],
     );
   }
 
   Widget buildBody(BuildContext context) {
+    if (showProfile) {
+      return SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Image.asset('assets/profile.png'),
+        ),
+      );
+    }
     return Column(
       children: [
         if (scannedProduct == null) const SizedBox(height: 40),
@@ -110,7 +146,7 @@ class _MyAppState extends State<MyApp> {
         if (scannedProduct == null)
           Expanded(
             child: Center(
-              child: Container(
+              child: SizedBox(
                 width: 300,
                 height: 300,
                 child: FittedBox(
@@ -133,7 +169,7 @@ class _MyAppState extends State<MyApp> {
               itemCount: 2 + (scannedProduct?.suggestions.length ?? 0),
               itemBuilder: buildItem,
             ),
-          )
+          ),
       ],
     );
   }
@@ -150,12 +186,22 @@ class _MyAppState extends State<MyApp> {
         );
       }
       return const Padding(
-        padding: EdgeInsets.fromLTRB(40, 10, 40, 0),
-        child: Text(
-          "Sustainable Alternative",
-          textScaleFactor: 1.4,
-          style: TextStyle(
-            color: Colors.black45,
+        padding: EdgeInsets.fromLTRB(14, 0, 14, 0),
+        child: Card(
+          elevation: 5,
+          color: Color(0xFF5CA747),
+          // Colors.green.shade300, // Color(0xFF5CA747)
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: Text(
+              "Sustainable Alternative",
+              textScaleFactor: 1.4,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
       );
@@ -166,6 +212,7 @@ class _MyAppState extends State<MyApp> {
 
   Widget buildProductItem(BuildContext context, Product product, int? kmSaved) {
     return Card(
+      elevation: 10,
       margin: const EdgeInsets.all(14),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(cardBorderRadius)),
